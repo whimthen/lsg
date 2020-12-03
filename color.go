@@ -15,73 +15,69 @@ var (
 	eeab46  = color.NewRGBStyle(color.HEX("#eeab46"))
 	c388425 = color.NewRGBStyle(color.HEX("#388425"))
 	Dark    = &Theme{
-		cs: &cs{
-			mc: map[rune]color.RGBColor{
-				'r': color.HEX("#a56361"),
-				'w': color.HEX("#b73931"),
-				'x': color.HEX("#0326a8"),
-				'-': color.HEX("#2b2c2c"),
-				'd': color.HEX("#0426a8"),
-			},
-			oc: color.HEX("#191970"),
-			gc: color.HEX("#808000"),
-			nc: color.HEX("#2c2c2c"),
-			sc: map[int]color.RGBColor{
-				0:   color.HEX("#efaa45"), // others
-				150: color.HEX("#a66321"), // >= 150MiB
-				500: color.HEX("#a22815"), // >= 500MiB
-			},
-			tc: color.HEX("#4682B4"),
-			ec: map[int]*color.RGBStyle{
-				category.File:       color.NewRGBStyle(color.HEX("#398424")),
-				category.Dir:        color.NewRGBStyle(color.HEX("#0426a8")),
-				category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
-				category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
-				category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
-				category.Broken:     c388425,
-				category.Code:       c388425,
-				category.Image:      eeab46,
-				category.Audio:      eeab46,
-				category.Video:      eeab46,
-			},
+		mc: map[rune]color.RGBColor{
+			'r': color.HEX("#a56361"),
+			'w': color.HEX("#b73931"),
+			'x': color.HEX("#0326a8"),
+			'-': color.HEX("#2b2c2c"),
+			'd': color.HEX("#0426a8"),
+		},
+		oc: color.HEX("#191970"),
+		gc: color.HEX("#808000"),
+		nc: color.HEX("#2c2c2c"),
+		sc: map[int]color.RGBColor{
+			0:   color.HEX("#efaa45"), // others
+			150: color.HEX("#a66321"), // >= 150MiB
+			500: color.HEX("#a22815"), // >= 500MiB
+		},
+		tc: color.HEX("#4682B4"),
+		ec: map[int]*color.RGBStyle{
+			category.File:       color.NewRGBStyle(color.HEX("#398424")),
+			category.Dir:        color.NewRGBStyle(color.HEX("#0426a8")),
+			category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
+			category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
+			category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
+			category.Broken:     c388425,
+			category.Code:       c388425,
+			category.Image:      eeab46,
+			category.Audio:      eeab46,
+			category.Video:      eeab46,
 		},
 	}
 	Light = &Theme{
-		cs: &cs{
-			mc: map[rune]color.RGBColor{
-				'r': color.HEX("#a56361"),
-				'w': color.HEX("#b73931"),
-				'x': color.HEX("#0326a8"),
-				'-': color.HEX("#2b2c2c"),
-				'd': color.HEX("#0426a8"),
-			},
-			oc: color.HEX("#191970"),
-			gc: color.HEX("#808000"),
-			nc: color.HEX("#2c2c2c"),
-			sc: map[int]color.RGBColor{
-				0:   color.HEX("#efaa45"), // others
-				150: color.HEX("#a66321"), // >= 150MiB
-				500: color.HEX("#a22815"), // >= 500MiB
-			},
-			tc: color.HEX("#4682B4"),
-			ec: map[int]*color.RGBStyle{
-				category.File:       color.NewRGBStyle(color.HEX("#398424")),
-				category.Dir:        color.NewRGBStyle(color.HEX("#0426a8")),
-				category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
-				category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
-				category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
-				category.Broken:     c388425,
-				category.Code:       c388425,
-				category.Image:      eeab46,
-				category.Audio:      eeab46,
-				category.Video:      eeab46,
-			},
+		mc: map[rune]color.RGBColor{
+			'r': color.HEX("#a56361"),
+			'w': color.HEX("#b73931"),
+			'x': color.HEX("#0326a8"),
+			'-': color.HEX("#2b2c2c"),
+			'd': color.HEX("#0426a8"),
+		},
+		oc: color.HEX("#191970"),
+		gc: color.HEX("#808000"),
+		nc: color.HEX("#2c2c2c"),
+		sc: map[int]color.RGBColor{
+			0:   color.HEX("#efaa45"), // others
+			150: color.HEX("#a66321"), // >= 150MiB
+			500: color.HEX("#a22815"), // >= 500MiB
+		},
+		tc: color.HEX("#4682B4"),
+		ec: map[int]*color.RGBStyle{
+			category.File:       color.NewRGBStyle(color.HEX("#398424")),
+			category.Dir:        color.NewRGBStyle(color.HEX("#0426a8")),
+			category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
+			category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
+			category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
+			category.Broken:     c388425,
+			category.Code:       c388425,
+			category.Image:      eeab46,
+			category.Audio:      eeab46,
+			category.Video:      eeab46,
 		},
 	}
 )
 
 // Theme color definition
-type cs struct {
+type Theme struct {
 	mc map[rune]color.RGBColor // mode color
 	oc color.RGBColor          // owner color
 	gc color.RGBColor          // group color
@@ -89,11 +85,6 @@ type cs struct {
 	sc map[int]color.RGBColor  // size color
 	tc color.RGBColor          // time color
 	ec map[int]*color.RGBStyle // entry color
-}
-
-// interface of Theme
-type Theme struct {
-	*cs
 }
 
 func (t *Theme) mode(args Args, format, mode string, align int) string {
