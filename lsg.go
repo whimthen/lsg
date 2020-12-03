@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/gookit/color"
 	"io/ioutil"
 	"path/filepath"
 	"runtime"
@@ -229,7 +228,7 @@ func formatGrid(files []File, args Args) {
 }
 
 func formatList(files []File, args Args) {
-	var sizes []string
+	sizes := []int64{}
 	var totalSize int64
 
 	var align struct {
@@ -247,12 +246,11 @@ func formatList(files []File, args Args) {
 		totalSize += file.size()
 
 		if args.bytes {
-			sizeEntry = color.FgGreen.Sprintf("%d %c", file.size(), 'B')
-			//sizeEntry = fmt.Sprintf("%d %c", file.size(), 'B')
+			sizeEntry = fmt.Sprintf("%d %c", file.size(), 'B')
 		} else {
 			sizeEntry = humanizeSize(file.size())
 		}
-		sizes = append(sizes, sizeEntry)
+		sizes = append(sizes, file.size())
 
 		if len(sizeEntry) > align.size {
 			align.size = len(sizeEntry)
@@ -283,16 +281,16 @@ func formatList(files []File, args Args) {
 	}
 
 	if args.bytes {
-		_, _ = fmt.Fprintf(bufStdout, theme.total("total %s\n", strconv.FormatInt(totalSize, 10)))
+		_, _ = fmt.Fprintf(bufStdout, theme.total(args, "total %s\n", strconv.FormatInt(totalSize, 10)))
 	} else {
-		_, _ = fmt.Fprintf(bufStdout, theme.total("total %s\n", humanizeSize(totalSize)))
+		_, _ = fmt.Fprintf(bufStdout, theme.total(args, "total %s\n", humanizeSize(totalSize)))
 	}
 
 	for i, file := range files {
 		var line string
 		if args.listExtend {
-			line += theme.mode("%-*s   ", file.fileMode(), align.fileMode)
-			line += theme.nLink("%*d  ", align.nLink, file.nLink())
+			line += theme.mode(args, "%-*s   ", file.fileMode(), align.fileMode)
+			line += theme.nLink(args, "%*d  ", align.nLink, file.nLink())
 		}
 
 		if args.listExtend && runtime.GOOS != "windows" {
@@ -304,17 +302,18 @@ func formatList(files []File, args Args) {
 				owner = group
 			}
 
-			line += theme.owner("%-*s  ", align.owner, owner)
-			line += theme.group("%-*s", align.group, group)
+			line += theme.owner(args, "%-*s  ", align.owner, owner)
+			line += theme.group(args, "%-*s", align.group, group)
 		}
 
-		sizeEntry := fmt.Sprintf("%*s", align.size+3, sizes[i])
+		//sizeEntry := fmt.Sprintf("%*s", align.size+3, sizes[i])
 		//if !args.noColors {
 		//	sizeEntry = aurora.Colorize(sizeEntry, aurora.GreenFg).String()
 		//}
-		line += sizeEntry + " "
-		line += files[i].modTime() + " "
-		line += files[i].colored(args)
+		line += theme.size(args, "%*s", sizes[i], align.size+3)
+		line += theme.time(args, file, 3)
+		//line += files[i].colored(args)
+		line += theme.entry(args, files[i])
 
 		_, _ = fmt.Fprintln(bufStdout, line)
 	}

@@ -7,73 +7,74 @@ import (
 	"github.com/operatios/lsg/category"
 )
 
+const (
+	MB = 1024 * 1024
+)
+
 var (
-	//red       = color.New(color.FgRed).SprintfFunc()
-	//hiGreen   = color.New(color.FgHiGreen).SprintfFunc()
-	//hiYellow  = color.New(color.FgHiYellow).SprintfFunc()
-	//yellow    = color.YellowString
-	//hiCyan    = color.HiCyanString
-	//cyan      = color.CyanString
-	//hiMagenta = color.HiMagentaString
-	//magenta   = color.MagentaString
-
-	cachedColor = map[string]*color.RGBColor{}
-
-	Dark = &Theme{
+	eeab46  = color.NewRGBStyle(color.HEX("#eeab46"))
+	c388425 = color.NewRGBStyle(color.HEX("#388425"))
+	Dark    = &Theme{
 		cs: &cs{
-			mc: nil,
-			oc: "#0426a8",
-			gc: "#2c2d2c",
-			nc: "#2c2c2c",
-			sc: map[int]string{
-				0:   "#efaa45", // others
-				150: "#a66321", // >= 150MiB
-				500: "#a22815", // >= 500MiB
+			mc: map[rune]color.RGBColor{
+				'r': color.HEX("#a56361"),
+				'w': color.HEX("#b73931"),
+				'x': color.HEX("#0326a8"),
+				'-': color.HEX("#2b2c2c"),
+				'd': color.HEX("#0426a8"),
 			},
-			tc: "#70cbdc",
-			ec: map[int]string{
-				category.File:       "#398424",
-				category.Dir:        "#0426a8",
-				category.Symlink:    "#2c2c2c",
-				category.Broken:     "#388425",
-				category.Archive:    "#50933e",
-				category.Executable: "#78fa53",
-				category.Code:       "#388425",
-				category.Image:      "#eeab46",
-				category.Audio:      "#eeab46",
-				category.Video:      "#eeab46",
+			oc: color.HEX("#191970"),
+			gc: color.HEX("#808000"),
+			nc: color.HEX("#2c2c2c"),
+			sc: map[int]color.RGBColor{
+				0:   color.HEX("#efaa45"), // others
+				150: color.HEX("#a66321"), // >= 150MiB
+				500: color.HEX("#a22815"), // >= 500MiB
+			},
+			tc: color.HEX("#4682B4"),
+			ec: map[int]*color.RGBStyle{
+				category.File:       color.NewRGBStyle(color.HEX("#398424")),
+				category.Dir:        color.NewRGBStyle(color.HEX("#0426a8")),
+				category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
+				category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
+				category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
+				category.Broken:     c388425,
+				category.Code:       c388425,
+				category.Image:      eeab46,
+				category.Audio:      eeab46,
+				category.Video:      eeab46,
 			},
 		},
 	}
 	Light = &Theme{
 		cs: &cs{
-			mc: map[rune]string{
-				'r': "#a56361",
-				'w': "#b73931",
-				'x': "#0326a8",
-				'-': "#2b2c2c",
-				'd': "#0426a8",
+			mc: map[rune]color.RGBColor{
+				'r': color.HEX("#a56361"),
+				'w': color.HEX("#b73931"),
+				'x': color.HEX("#0326a8"),
+				'-': color.HEX("#2b2c2c"),
+				'd': color.HEX("#0426a8"),
 			},
-			oc: "#0426a8",
-			gc: "#2c2d2c",
-			nc: "#2c2c2c",
-			sc: map[int]string{
-				0:   "#efaa45", // others
-				150: "#a66321", // >= 150MiB
-				500: "#a22815", // >= 500MiB
+			oc: color.HEX("#191970"),
+			gc: color.HEX("#808000"),
+			nc: color.HEX("#2c2c2c"),
+			sc: map[int]color.RGBColor{
+				0:   color.HEX("#efaa45"), // others
+				150: color.HEX("#a66321"), // >= 150MiB
+				500: color.HEX("#a22815"), // >= 500MiB
 			},
-			tc: "#70cbdc",
-			ec: map[int]string{
-				category.File:       "#398424",
-				category.Dir:        "#0426a8",
-				category.Symlink:    "#2c2c2c",
-				category.Broken:     "#388425",
-				category.Archive:    "#50933e",
-				category.Executable: "#78fa53",
-				category.Code:       "#388425",
-				category.Image:      "#eeab46",
-				category.Audio:      "#eeab46",
-				category.Video:      "#eeab46",
+			tc: color.HEX("#4682B4"),
+			ec: map[int]*color.RGBStyle{
+				category.File:       color.NewRGBStyle(color.HEX("#398424")),
+				category.Dir:        color.NewRGBStyle(color.HEX("#0426a8")),
+				category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
+				category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
+				category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
+				category.Broken:     c388425,
+				category.Code:       c388425,
+				category.Image:      eeab46,
+				category.Audio:      eeab46,
+				category.Video:      eeab46,
 			},
 		},
 	}
@@ -81,13 +82,13 @@ var (
 
 // Theme color definition
 type cs struct {
-	mc map[rune]string // mode color
-	oc string          // owner color
-	gc string          // group color
-	nc string          // nLink color
-	sc map[int]string  // size color
-	tc string          // time color
-	ec map[int]string  // entry color
+	mc map[rune]color.RGBColor // mode color
+	oc color.RGBColor          // owner color
+	gc color.RGBColor          // group color
+	nc color.RGBColor          // nLink color
+	sc map[int]color.RGBColor  // size color
+	tc color.RGBColor          // time color
+	ec map[int]*color.RGBStyle // entry color
 }
 
 // interface of Theme
@@ -95,42 +96,69 @@ type Theme struct {
 	*cs
 }
 
-func (t *Theme) mode(format, mode string, align int) string {
+func (t *Theme) mode(args Args, format, mode string, align int) string {
 	mode = fmt.Sprintf(format, align, mode)
+	if args.noColors {
+		return mode
+	}
 	buffer := bytes.Buffer{}
 	for _, c := range mode {
-		buffer.WriteString(getColor(t.mc[c]).Sprint(string(c)))
+		buffer.WriteString(t.mc[c].Sprint(string(c)))
 	}
 	return buffer.String()
 }
-func (t *Theme) nLink(format string, v ...interface{}) string {
-	return color.FgBlack.Sprintf(format, v...)
-}
-func (t *Theme) owner(format string, v ...interface{}) string {
-	return getColor(t.oc).Sprintf(format, v...)
-}
-func (t *Theme) group(format string, v ...interface{}) string {
-	return getColor(t.gc).Sprintf(format, v...)
-}
-func (t *Theme) size(size int, format string, v ...interface{}) string {
-	return getColor(t.sc[size]).Sprintf(format, v...)
-}
-func (t *Theme) time(format string, v ...interface{}) string {
-	return ""
-}
-func (t *Theme) entry(file File, args Args) string {
-	return ""
-}
-func (t *Theme) total(format string, v ...interface{}) string {
-	return getColor(t.ec[category.File]).Sprintf(format, v...)
-}
-
-func getColor(hex string) *color.RGBColor {
-	if c, ok := cachedColor[hex]; ok {
-		return c
+func (t *Theme) nLink(args Args, format string, v ...interface{}) string {
+	if args.noColors {
+		return fmt.Sprintf(format, v...)
 	}
+	return color.FgDefault.Sprintf(format, v...)
+}
+func (t *Theme) owner(args Args, format string, v ...interface{}) string {
+	if args.noColors {
+		return fmt.Sprintf(format, v...)
+	}
+	return t.oc.Sprintf(format, v...)
+}
+func (t *Theme) group(args Args, format string, v ...interface{}) string {
+	if args.noColors {
+		return fmt.Sprintf(format, v...)
+	}
+	return t.gc.Sprintf(format, v...)
+}
+func (t *Theme) size(args Args, format string, size int64, align int) string {
+	if args.noColors {
+		return fmt.Sprintf(format, align, humanizeSize(size))
+	}
+	colorKey := 0
+	if size > 1024 {
+		if size >= 150*MB {
+			if size < 500*MB {
+				colorKey = 150
+			} else {
+				colorKey = 500
+			}
+		}
+	}
+	return t.sc[colorKey].Sprintf(format, align, humanizeSize(size))
+}
+func (t *Theme) time(args Args, f File, alignOffset int) string {
+	formatted := f.info.ModTime().Format("Mon Jan 02 15:04:05 2006")
+	if args.noColors {
+		return fmt.Sprintf("%*s  ", len(formatted)+alignOffset, formatted)
+	}
+	return t.tc.Sprintf("%*s  ", len(formatted)+alignOffset, formatted)
+}
+func (t *Theme) entry(args Args, f File) string {
+	pretty := f.pretty(args)
 
-	rgbColor := color.HEX(hex)
-	cachedColor[hex] = &rgbColor
-	return &rgbColor
+	if args.noColors {
+		return pretty
+	}
+	return t.ec[f.category()].Sprint(pretty)
+}
+func (t *Theme) total(args Args, format string, v ...interface{}) string {
+	if args.noColors {
+		return fmt.Sprintf(format, v...)
+	}
+	return t.ec[category.File].Sprintf(format, v...)
 }

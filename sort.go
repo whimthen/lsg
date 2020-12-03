@@ -16,7 +16,7 @@ func sortFiles(files []File, sortType string, reverse bool) {
 
 	case "t", "time":
 		sort.Slice(files, func(i, j int) bool {
-			return files[i].modTime() > files[j].modTime()
+			return files[i].info.ModTime().After(files[j].info.ModTime())
 		})
 
 	case "x", "extension":

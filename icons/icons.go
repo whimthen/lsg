@@ -29,6 +29,7 @@ const (
 	Jar     = ""
 	Xml     = ""
 	Apple   = ""
+	Config  = ""
 )
 
 // To add new icons just add a new key: value pair here
@@ -38,7 +39,11 @@ var Extensions = map[string]string{
 	".h":                CLang,
 	".hpp":              CPP,
 	".hxx":              CPP,
-	".cfg":              "",
+	".cfg":              Config,
+	".gitignore":        Config,
+	".gitconfig":        Config,
+	".profile":          Config,
+	".zshrc":            Config,
 	".clj":              Clojure,
 	".cljc":             Clojure,
 	".cljs":             Clojure,
