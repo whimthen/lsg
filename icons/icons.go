@@ -28,6 +28,7 @@ const (
 	Log     = ""
 	Jar     = ""
 	Xml     = ""
+	Apple   = ""
 )
 
 // To add new icons just add a new key: value pair here
@@ -53,7 +54,8 @@ var Extensions = map[string]string{
 	".d":                "",
 	".dart":             "",
 	".db":               "",
-	".ds_store":         "",
+	".ds_store":         Apple,
+	".dmg":              Apple,
 	".go":               "ﳑ",
 	".ipynb":            Python,
 	".md":               "",
@@ -84,7 +86,6 @@ var Extensions = map[string]string{
 	".cab":  Archive,
 	".cpio": Archive,
 	".deb":  Archive,
-	".dmg":  Archive,
 	".egg":  Archive,
 	".gz":   Archive,
 	".iso":  Archive,

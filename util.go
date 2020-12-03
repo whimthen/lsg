@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -40,19 +39,19 @@ func splitPath(path string) []string {
 
 func humanizeSize(size int64) string {
 	if size < 1024 {
-		return strconv.FormatInt(size, 10)
+		return fmt.Sprintf("%d B  ", size)
 	}
 
 	fSize := float64(size)
 	fSize /= 1024
 
-	for _, unit := range []rune{'K', 'M', 'G', 'T', 'P', 'E', 'Z'} {
+	for _, unit := range []string{"KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"} {
 		if fSize < 9 {
-			return fmt.Sprintf("%.1f%c", fSize, unit)
+			return fmt.Sprintf("%.1f %s", fSize, unit)
 		} else if fSize < 1000 {
-			return fmt.Sprintf("%.0f%c", fSize, unit)
+			return fmt.Sprintf("%.0f %s", fSize, unit)
 		}
 		fSize /= 1024
 	}
-	return fmt.Sprintf("%.1f%c", fSize, 'Y')
+	return fmt.Sprintf("%.1f %s", fSize, "YiB")
 }

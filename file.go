@@ -1,14 +1,12 @@
 package main
 
 import (
-	"os"
-	"path/filepath"
-	"strings"
-	"time"
-
 	"github.com/logrusorgru/aurora"
 	"github.com/operatios/lsg/category"
 	"github.com/operatios/lsg/icons"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 type File struct {
@@ -41,10 +39,10 @@ func (f File) size() int64 {
 
 func (f File) modTime() string {
 	modtime := f.info.ModTime()
-	if modtime.Year() == time.Now().Year() {
-		return modtime.Format("Jan 02 15:04")
-	}
-	return modtime.Format("Jan 02  2006")
+	//if modtime.Year() == time.Now().Year() {
+	//	return modtime.Format("Mon Jan 2 15:04:05 2006")
+	//}
+	return modtime.Format("Mon Jan 02 15:04:05 2006")
 }
 
 func (f File) fileMode() string {

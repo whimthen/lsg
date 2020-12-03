@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
+	"github.com/gookit/color"
 	"io/ioutil"
 	"path/filepath"
 	"runtime"
 	"sort"
+	"strconv"
 	"strings"
 	"unicode/utf8"
 
 	"github.com/bmatcuk/doublestar/v2"
-	"github.com/logrusorgru/aurora"
 )
 
 func processGlob(path string, args Args) {
@@ -40,7 +41,7 @@ func processGlob(path string, args Args) {
 			continue
 		}
 
-		fmt.Fprintf(bufStdout, "%s:\n", parent)
+		_, _ = fmt.Fprintf(bufStdout, "%s:\n", parent)
 		processFiles(children, args)
 	}
 }
@@ -88,7 +89,7 @@ func processTree(files []File, fromDepths map[int]bool, args Args) {
 			prefix += "├──"
 		}
 
-		fmt.Fprintln(bufStdout, prefix+file.colored(args))
+		_, _ = fmt.Fprintln(bufStdout, prefix+file.colored(args))
 
 		if file.isDir() && !file.isLink() {
 			subFiles, _ := getFiles(file.path, args.all)
@@ -218,11 +219,11 @@ func formatGrid(files []File, args Args) {
 	if columns > 1 {
 		for i := range rows {
 			sep := strings.Repeat(" ", args.colSep)
-			fmt.Fprintln(bufStdout, strings.Join(rows[i], sep))
+			_, _ = fmt.Fprintln(bufStdout, strings.Join(rows[i], sep))
 		}
 	} else {
 		for i := range files {
-			fmt.Fprintln(bufStdout, files[i].colored(args))
+			_, _ = fmt.Fprintln(bufStdout, files[i].colored(args))
 		}
 	}
 }
@@ -239,12 +240,15 @@ func formatList(files []File, args Args) {
 		group    int
 	}
 
+	theme := Light
+
 	for _, file := range files {
 		var sizeEntry string
 		totalSize += file.size()
 
 		if args.bytes {
-			sizeEntry = fmt.Sprint(file.size())
+			sizeEntry = color.FgGreen.Sprintf("%d %c", file.size(), 'B')
+			//sizeEntry = fmt.Sprintf("%d %c", file.size(), 'B')
 		} else {
 			sizeEntry = humanizeSize(file.size())
 		}
@@ -255,8 +259,9 @@ func formatList(files []File, args Args) {
 		}
 
 		if args.listExtend {
-			if len(file.fileMode()) > align.fileMode {
-				align.fileMode = len(file.fileMode())
+			modeLen := len(file.fileMode())
+			if modeLen > align.fileMode {
+				align.fileMode = modeLen
 			}
 
 			nLinkLen := len(fmt.Sprint(file.nLink()))
@@ -265,30 +270,32 @@ func formatList(files []File, args Args) {
 			}
 		}
 
-		if args.listExtend && runtime.GOOS == "linux" {
-			if len(file.owner()) > align.owner {
-				align.owner = len(file.owner())
+		if args.listExtend && runtime.GOOS != "windows" {
+			ownerLen := len(file.owner())
+			if ownerLen > align.owner {
+				align.owner = ownerLen
 			}
-			if len(file.group()) > align.group {
-				align.group = len(file.group())
+			groupLen := len(file.group())
+			if groupLen > align.group {
+				align.group = groupLen
 			}
 		}
 	}
 
 	if args.bytes {
-		fmt.Fprintf(bufStdout, "total %d\n", totalSize)
+		_, _ = fmt.Fprintf(bufStdout, theme.total("total %s\n", strconv.FormatInt(totalSize, 10)))
 	} else {
-		fmt.Fprintf(bufStdout, "total %s\n", humanizeSize(totalSize))
+		_, _ = fmt.Fprintf(bufStdout, theme.total("total %s\n", humanizeSize(totalSize)))
 	}
 
 	for i, file := range files {
 		var line string
 		if args.listExtend {
-			line += fmt.Sprintf("%-*s ", align.fileMode, file.fileMode())
-			line += fmt.Sprintf("%*d ", align.nLink, file.nLink())
+			line += theme.mode("%-*s   ", file.fileMode(), align.fileMode)
+			line += theme.nLink("%*d  ", align.nLink, file.nLink())
 		}
 
-		if args.listExtend && runtime.GOOS == "linux" {
+		if args.listExtend && runtime.GOOS != "windows" {
 			owner := file.owner()
 			group := file.group()
 
@@ -297,18 +304,18 @@ func formatList(files []File, args Args) {
 				owner = group
 			}
 
-			line += fmt.Sprintf("%*s ", align.owner-1, owner)
-			line += fmt.Sprintf("%*s ", align.group-1, group)
+			line += theme.owner("%-*s  ", align.owner, owner)
+			line += theme.group("%-*s", align.group, group)
 		}
 
-		sizeEntry := fmt.Sprintf("%*s", align.size, sizes[i])
-		if !args.noColors {
-			sizeEntry = aurora.Colorize(sizeEntry, aurora.GreenFg).String()
-		}
+		sizeEntry := fmt.Sprintf("%*s", align.size+3, sizes[i])
+		//if !args.noColors {
+		//	sizeEntry = aurora.Colorize(sizeEntry, aurora.GreenFg).String()
+		//}
 		line += sizeEntry + " "
 		line += files[i].modTime() + " "
 		line += files[i].colored(args)
 
-		fmt.Fprintln(bufStdout, line)
+		_, _ = fmt.Fprintln(bufStdout, line)
 	}
 }
