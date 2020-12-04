@@ -36,14 +36,6 @@ func (f File) size() int64 {
 	return f.info.Size()
 }
 
-func (f File) modTime() string {
-	modtime := f.info.ModTime()
-	//if modtime.Year() == time.Now().Year() {
-	//	return modtime.Format("Mon Jan 2 15:04:05 2006")
-	//}
-	return modtime.Format("Mon Jan 02 15:04:05 2006")
-}
-
 func (f File) fileMode() string {
 	return f.info.Mode().String()
 }

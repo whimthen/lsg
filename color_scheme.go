@@ -14,6 +14,7 @@ const (
 var (
 	eeab46  = color.NewRGBStyle(color.HEX("#B8860B"))
 	c388425 = color.NewRGBStyle(color.HEX("#388425"))
+	link    = color.HEX("#4169E1")
 	Dark    = &Theme{
 		mc: map[rune]color.RGBColor{
 			'r': color.HEX("#a56361"),
@@ -51,6 +52,7 @@ var (
 			'x': color.HEX("#0326a8"),
 			'-': color.HEX("#2b2c2c"),
 			'd': color.HEX("#0426a8"),
+			'L': link,
 		},
 		oc: color.HEX("#191970"),
 		gc: color.HEX("#808000"),
@@ -63,12 +65,12 @@ var (
 		},
 		tc: color.HEX("#4682B4"),
 		ec: map[int]*color.RGBStyle{
-			category.File:       color.NewRGBStyle(color.HEX("#228B22")),
-			category.Dir:        color.NewRGBStyle(color.HEX("#0000CD")),
-			category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
-			category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
-			category.Executable: color.NewRGBStyle(color.HEX("#006400")),
-			category.Broken:     c388425,
+			category.File:       color.HEXStyle("#228B22"),
+			category.Dir:        color.HEXStyle("#0000CD"),
+			category.Symlink:    color.NewRGBStyle(link),
+			category.Archive:    color.HEXStyle("#cd0000").AddOpts(color.OpUnderscore),
+			category.Executable: color.HEXStyle("#006400"),
+			category.Broken:     color.HEXStyle("#CD2626").AddOpts(color.OpBold),
 			category.Code:       c388425,
 			category.Image:      eeab46,
 			category.Audio:      eeab46,
@@ -156,6 +158,10 @@ func (t *Theme) entry(args Args, f File) string {
 
 	if args.noColors {
 		return pretty
+	}
+
+	if f.isBroken() {
+		pretty += " [Dead link]"
 	}
 	return t.ec[f.category()].Sprint(pretty)
 }
