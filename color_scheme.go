@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/gookit/color"
 	"github.com/operatios/lsg/category"
+	"github.com/operatios/lsg/icons"
+	"strings"
 )
 
 const (
@@ -14,27 +16,31 @@ const (
 var (
 	eeab46  = color.NewRGBStyle(color.HEX("#B8860B"))
 	c388425 = color.NewRGBStyle(color.HEX("#388425"))
+	c0426a8 = color.HEX("#0426a8")
 	link    = color.HEX("#4169E1")
 	Dark    = &Theme{
+		oc:  color.HEX("#fffedb"),
+		gc:  color.HEX("#d7d691"),
+		nc:  color.HEX("#ffffff"),
+		tc:  color.HEX("#71ad8a"),
+		orc: color.FgLightRed,
 		mc: map[rune]color.RGBColor{
-			'r': color.HEX("#a56361"),
-			'w': color.HEX("#b73931"),
-			'x': color.HEX("#0326a8"),
-			'-': color.HEX("#2b2c2c"),
-			'd': color.HEX("#0426a8"),
+			'r': color.HEX("#7ed36e"),
+			'w': color.HEX("#d7d691"),
+			'x': color.HEX("#b73831"),
+			'-': color.HEX("#cd8b89"),
+			'd': color.HEX("#4aaef8"),
+			'L': link,
 		},
-		oc: color.HEX("#191970"),
-		gc: color.HEX("#808000"),
-		nc: color.HEX("#2c2c2c"),
 		sc: map[int]color.RGBColor{
-			0:   color.HEX("#efaa45"), // others
-			150: color.HEX("#a66321"), // >= 150MiB
-			500: color.HEX("#a22815"), // >= 500MiB
+			0:    color.HEX("#fffedb"), // others
+			150:  color.HEX("#fffa53"), // >= 150MiB
+			500:  color.HEX("#f4b13e"), // >= 500MiB
+			1024: color.HEX("#CD950C"), // >= 1G
 		},
-		tc: color.HEX("#4682B4"),
 		ec: map[int]*color.RGBStyle{
-			category.File:       color.NewRGBStyle(color.HEX("#398424")),
-			category.Dir:        color.NewRGBStyle(color.HEX("#0426a8")),
+			category.File:       color.NewRGBStyle(color.HEX("#6ff44a")),
+			category.Dir:        color.NewRGBStyle(color.HEX("#4aaef8")),
 			category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
 			category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
 			category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
@@ -46,27 +52,29 @@ var (
 		},
 	}
 	Light = &Theme{
+		oc:  color.HEX("#191970"),
+		gc:  color.HEX("#808000"),
+		nc:  color.HEX("#2c2c2c"),
+		tc:  color.HEX("#4682B4"),
+		lc:  color.HEX("#225db5"),
+		orc: color.FgRed,
 		mc: map[rune]color.RGBColor{
 			'r': color.HEX("#a56361"),
 			'w': color.HEX("#b73931"),
 			'x': color.HEX("#0326a8"),
 			'-': color.HEX("#2b2c2c"),
-			'd': color.HEX("#0426a8"),
+			'd': c0426a8,
 			'L': link,
 		},
-		oc: color.HEX("#191970"),
-		gc: color.HEX("#808000"),
-		nc: color.HEX("#2c2c2c"),
 		sc: map[int]color.RGBColor{
 			0:    color.HEX("#efaa45"), // others
 			150:  color.HEX("#a66321"), // >= 150MiB
-			500:  color.HEX("#a22815"), // >= 512MiB
+			500:  color.HEX("#a22815"), // >= 500MiB
 			1024: color.HEX("#8B008B"), // >= 1G
 		},
-		tc: color.HEX("#4682B4"),
 		ec: map[int]*color.RGBStyle{
 			category.File:       color.HEXStyle("#228B22"),
-			category.Dir:        color.HEXStyle("#0000CD"),
+			category.Dir:        color.NewRGBStyle(c0426a8),
 			category.Symlink:    color.NewRGBStyle(link),
 			category.Archive:    color.HEXStyle("#cd0000").AddOpts(color.OpUnderscore),
 			category.Executable: color.HEXStyle("#006400"),
@@ -81,13 +89,15 @@ var (
 
 // Theme color definition
 type Theme struct {
-	mc map[rune]color.RGBColor // mode color
-	oc color.RGBColor          // owner color
-	gc color.RGBColor          // group color
-	nc color.RGBColor          // nLink color
-	sc map[int]color.RGBColor  // size color
-	tc color.RGBColor          // time color
-	ec map[int]*color.RGBStyle // entry color
+	mc  map[rune]color.RGBColor // mode color
+	oc  color.RGBColor          // owner color
+	gc  color.RGBColor          // group color
+	nc  color.RGBColor          // nLink color
+	sc  map[int]color.RGBColor  // size color
+	tc  color.RGBColor          // time color
+	ec  map[int]*color.RGBStyle // entry color
+	orc color.Color             // owner root color
+	lc  color.RGBColor          // link real color
 }
 
 func (t *Theme) mode(args Args, format, mode string, align int) string {
@@ -114,7 +124,7 @@ func (t *Theme) owner(args Args, format, owner string, align int) string {
 		return fmt.Sprintf(format, align, owner)
 	}
 	if owner == "root" {
-		return color.FgRed.Sprintf(format, align, owner)
+		return t.orc.Sprintf(format, align, owner)
 	}
 	return t.oc.Sprintf(format, align, owner)
 }
@@ -162,6 +172,12 @@ func (t *Theme) entry(args Args, f File) string {
 
 	if f.isBroken() {
 		pretty += " [Dead link]"
+	}
+	if f.isLink() {
+		arrowIndex := strings.Index(pretty, icons.LinkArrow)
+		link := pretty[:arrowIndex]
+		realf := pretty[arrowIndex:]
+		return t.ec[f.category()].Sprint(link) + t.lc.Sprint(realf)
 	}
 	return t.ec[f.category()].Sprint(pretty)
 }
