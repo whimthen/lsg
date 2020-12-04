@@ -46,9 +46,11 @@ var Extensions = map[string]int{
 	".zip":  Archive,
 	".zipx": Archive,
 
-	".bat": Executable,
-	".exe": Executable,
-	".msi": Executable,
+	".bat":   Executable,
+	".exe":   Executable,
+	".msi":   Executable,
+	".sh":    Executable,
+	".shell": Executable,
 
 	".c":         Code,
 	".cc":        Code,
@@ -85,7 +87,6 @@ var Extensions = map[string]int{
 	".py":        Code,
 	".rb":        Code,
 	".rs":        Code,
-	".sh":        Code,
 	".swift":     Code,
 	".vb":        Code,
 	".vcxproj":   Code,

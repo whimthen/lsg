@@ -77,15 +77,15 @@ func processTree(files []File, fromDepths map[int]bool, args Args) {
 		var prefix string
 		for i := 0; i < depth; i++ {
 			if exists := fromDepths[i]; exists {
-				prefix += "│   "
+				prefix += "│  "
 			} else {
-				prefix += "    "
+				prefix += "   "
 			}
 		}
 		if isLast {
-			prefix += "└── "
+			prefix += "└─ "
 		} else {
-			prefix += "├── "
+			prefix += "├─ "
 		}
 
 		_, _ = fmt.Fprintln(bufStdout, prefix+theme.entry(args, file))
@@ -300,7 +300,7 @@ func formatList(files []File, args Args) {
 				owner = group
 			}
 
-			line += theme.owner(args, "%-*s  ", align.owner, owner)
+			line += theme.owner(args, "%-*s  ", owner, align.owner)
 			line += theme.group(args, "%-*s", align.group, group)
 		}
 

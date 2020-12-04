@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/logrusorgru/aurora"
 	"github.com/operatios/lsg/category"
 	"github.com/operatios/lsg/icons"
 	"os"
@@ -127,13 +126,4 @@ func (f File) icon() string {
 	}
 
 	return icons.File
-}
-
-func (f File) colored(args Args) string {
-	pretty := f.pretty(args)
-
-	if args.noColors {
-		return pretty
-	}
-	return aurora.Colorize(pretty, colorScheme[f.category()]).String()
 }

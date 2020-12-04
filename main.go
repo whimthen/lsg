@@ -9,7 +9,6 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/logrusorgru/aurora"
 	"github.com/operatios/lsg/category"
 	"golang.org/x/crypto/ssh/terminal"
 )
@@ -56,7 +55,6 @@ func main() {
 
 func doLS(args Args) {
 	for _, path := range args.paths {
-
 		if strings.ContainsRune(path, '*') {
 			processGlob(path, args)
 		} else {
@@ -97,7 +95,7 @@ func doTree(args Args) {
 
 		clean := filepath.Clean(path)
 		if !args.noColors {
-			clean = aurora.Colorize(clean, colorScheme[category.Dir]).String()
+			clean = theme.ec[category.Dir].Sprint(clean)
 		}
 		_, _ = fmt.Fprintln(bufStdout, clean)
 
