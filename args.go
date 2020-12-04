@@ -37,6 +37,7 @@ type Args struct {
 	noTargets  bool
 	noColors   bool
 	noIcons    bool
+	dark       bool
 }
 
 func getArgs() Args {
@@ -56,8 +57,9 @@ func getArgs() Args {
 	flag.BoolVar(&args.noTargets, "no-targets", false, helpNoTargets)
 	flag.BoolVar(&args.noColors, "no-colors", false, helpNoColors)
 	flag.BoolVar(&args.noIcons, "no-icons", false, helpNoIcons)
+	flag.BoolVar(&args.dark, "dark", false, "Enable dark theme color output")
 
-	var showHelp *bool = flag.BoolP("help", "h", false, helpShow)
+	var showHelp = flag.BoolP("help", "h", false, helpShow)
 
 	flag.Parse()
 
@@ -67,8 +69,14 @@ func getArgs() Args {
 	}
 
 	if args.colSep < 0 {
-		fmt.Fprintln(os.Stderr, "column separator length should be >=0")
+		_, _ = fmt.Fprintln(os.Stderr, "column separator length should be >=0")
 		os.Exit(1)
+	}
+
+	if args.dark {
+		theme = Dark
+	} else {
+		theme = Light
 	}
 
 	args.paths = flag.Args()

@@ -77,18 +77,18 @@ func processTree(files []File, fromDepths map[int]bool, args Args) {
 		var prefix string
 		for i := 0; i < depth; i++ {
 			if exists := fromDepths[i]; exists {
-				prefix += "│  "
+				prefix += "│   "
 			} else {
-				prefix += "   "
+				prefix += "    "
 			}
 		}
 		if isLast {
-			prefix += "└──"
+			prefix += "└── "
 		} else {
-			prefix += "├──"
+			prefix += "├── "
 		}
 
-		_, _ = fmt.Fprintln(bufStdout, prefix+file.colored(args))
+		_, _ = fmt.Fprintln(bufStdout, prefix+theme.entry(args, file))
 
 		if file.isDir() && !file.isLink() {
 			subFiles, _ := getFiles(file.path, args.all)
@@ -183,7 +183,7 @@ func formatRows(files []File, columns int, args Args) [][]string {
 		wsAmt := columnWidths[col] - utf8.RuneCountInString(file.pretty(args))
 		padding := strings.Repeat(" ", wsAmt)
 
-		rowSlice[row] = append(rowSlice[row], file.colored(args)+padding)
+		rowSlice[row] = append(rowSlice[row], theme.entry(args, file)+padding)
 	}
 	return rowSlice
 }
@@ -222,7 +222,7 @@ func formatGrid(files []File, args Args) {
 		}
 	} else {
 		for i := range files {
-			_, _ = fmt.Fprintln(bufStdout, files[i].colored(args))
+			_, _ = fmt.Fprintln(bufStdout, theme.entry(args, files[i]))
 		}
 	}
 }
@@ -238,8 +238,6 @@ func formatList(files []File, args Args) {
 		owner    int
 		group    int
 	}
-
-	theme := Light
 
 	for _, file := range files {
 		var sizeEntry string
@@ -306,13 +304,8 @@ func formatList(files []File, args Args) {
 			line += theme.group(args, "%-*s", align.group, group)
 		}
 
-		//sizeEntry := fmt.Sprintf("%*s", align.size+3, sizes[i])
-		//if !args.noColors {
-		//	sizeEntry = aurora.Colorize(sizeEntry, aurora.GreenFg).String()
-		//}
 		line += theme.size(args, "%*s", sizes[i], align.size+3)
 		line += theme.time(args, file, 3)
-		//line += files[i].colored(args)
 		line += theme.entry(args, files[i])
 
 		_, _ = fmt.Fprintln(bufStdout, line)

@@ -17,6 +17,8 @@ import (
 var (
 	bufStdout           = bufio.NewWriter(os.Stdout)
 	terminalWidth, _, _ = terminal.GetSize(int(os.Stdout.Fd()))
+
+	theme *Theme
 )
 
 func isatty() bool {
@@ -61,12 +63,12 @@ func doLS(args Args) {
 			files, err := getFiles(path, args.all)
 
 			if err != nil {
-				fmt.Fprintln(os.Stderr, err)
+				_, _ = fmt.Fprintln(os.Stderr, err)
 				continue
 			}
 
 			if len(args.paths) > 1 {
-				fmt.Fprintln(bufStdout, filepath.Clean(path)+":")
+				_, _ = fmt.Fprintln(bufStdout, filepath.Clean(path)+":")
 			}
 
 			processFiles(files, args)
@@ -87,7 +89,7 @@ func doTree(args Args) {
 		}
 
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
+			_, _ = fmt.Fprintln(os.Stderr, err)
 			continue
 		}
 
@@ -97,7 +99,7 @@ func doTree(args Args) {
 		if !args.noColors {
 			clean = aurora.Colorize(clean, colorScheme[category.Dir]).String()
 		}
-		fmt.Fprintln(bufStdout, clean)
+		_, _ = fmt.Fprintln(bufStdout, clean)
 
 		processTree(files, map[int]bool{0: true}, args)
 	}

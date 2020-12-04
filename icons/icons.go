@@ -195,8 +195,9 @@ var Extensions = map[string]string{
 	".wmv":   Video,
 	".yuv":   Video,
 
-	".jar":  Jar,
-	".java": Jar,
+	".jar":   Jar,
+	".java":  Jar,
+	".class": Jar,
 
 	".pdf":  Pdf,
 	".docx": Word,
