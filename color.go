@@ -12,7 +12,7 @@ const (
 )
 
 var (
-	eeab46  = color.NewRGBStyle(color.HEX("#eeab46"))
+	eeab46  = color.NewRGBStyle(color.HEX("#B8860B"))
 	c388425 = color.NewRGBStyle(color.HEX("#388425"))
 	Dark    = &Theme{
 		mc: map[rune]color.RGBColor{
@@ -56,17 +56,18 @@ var (
 		gc: color.HEX("#808000"),
 		nc: color.HEX("#2c2c2c"),
 		sc: map[int]color.RGBColor{
-			0:   color.HEX("#efaa45"), // others
-			150: color.HEX("#a66321"), // >= 150MiB
-			500: color.HEX("#a22815"), // >= 500MiB
+			0:    color.HEX("#efaa45"), // others
+			150:  color.HEX("#a66321"), // >= 150MiB
+			500:  color.HEX("#a22815"), // >= 512MiB
+			1024: color.HEX("#8B008B"), // >= 1G
 		},
 		tc: color.HEX("#4682B4"),
 		ec: map[int]*color.RGBStyle{
-			category.File:       color.NewRGBStyle(color.HEX("#398424")),
-			category.Dir:        color.NewRGBStyle(color.HEX("#0426a8")),
+			category.File:       color.NewRGBStyle(color.HEX("#2E8B57")),
+			category.Dir:        color.NewRGBStyle(color.HEX("#0000CD")),
 			category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
 			category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
-			category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
+			category.Executable: color.NewRGBStyle(color.HEX("#006400")),
 			category.Broken:     c388425,
 			category.Code:       c388425,
 			category.Image:      eeab46,
@@ -125,8 +126,10 @@ func (t *Theme) size(args Args, format string, size int64, align int) string {
 		if size >= 150*MB {
 			if size < 500*MB {
 				colorKey = 150
-			} else {
+			} else if size < 1024*MB {
 				colorKey = 500
+			} else {
+				colorKey = 1024
 			}
 		}
 	}
