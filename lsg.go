@@ -279,13 +279,13 @@ func formatList(files []File, args Args) {
 	}
 
 	if args.bytes {
-		_, _ = fmt.Fprintf(bufStdout, theme.total(args, "total %s\n", strconv.FormatInt(totalSize, 10)))
+		_, _ = fmt.Fprintf(bufStdout, theme.total(args, "  total %s\n", strconv.FormatInt(totalSize, 10)))
 	} else {
-		_, _ = fmt.Fprintf(bufStdout, theme.total(args, "total %s\n", humanizeSize(totalSize)))
+		_, _ = fmt.Fprintf(bufStdout, theme.total(args, "  total %s\n", humanizeSize(totalSize)))
 	}
 
 	for i, file := range files {
-		var line string
+		line := "  "
 		if args.listExtend {
 			line += theme.mode(args, "%-*s   ", file.fileMode(), align.fileMode)
 			line += theme.nLink(args, "%*d  ", align.nLink, file.nLink())
