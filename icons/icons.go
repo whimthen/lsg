@@ -4,9 +4,10 @@ const (
 	File = ""
 	Dir  = ""
 
-	LinkFile  = ""
-	LinkDir   = ""
-	LinkArrow = ""
+	LinkFile = ""
+	LinkDir  = ""
+	//LinkArrow = "壟"
+	LinkArrow = ""
 
 	Archive = ""
 	Audio   = "ﱘ"
@@ -24,12 +25,13 @@ const (
 	Word    = ""
 	Pdf     = ""
 	Excel   = ""
-	Html    = ""
+	Html    = ""
 	Log     = ""
 	Jar     = ""
 	Xml     = ""
 	Apple   = ""
 	Config  = ""
+	JS      = ""
 )
 
 // To add new icons just add a new key: value pair here
@@ -71,7 +73,6 @@ var Extensions = map[string]string{
 	".vue":              "﵂",
 	".sln":              "",
 	".sql":              "",
-	".sqlite3":          "",
 	".sublime_keymap":   Subl,
 	".sublime_package":  Subl,
 	".sublime_settings": Subl,
@@ -196,8 +197,10 @@ var Extensions = map[string]string{
 	".yuv":   Video,
 
 	".jar":   Jar,
-	".java":  Jar,
+	".java":  "",
 	".class": Jar,
+
+	".js": JS,
 
 	".pdf":  Pdf,
 	".docx": Word,
@@ -214,4 +217,11 @@ var Extensions = map[string]string{
 	".log":  Log,
 	".json": "",
 	".epub": "",
+
+	// Databases
+	".sqlite":  "",
+	".sqlite3": "",
+
+	// Configurations
+	".vim": "",
 }
