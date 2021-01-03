@@ -38,6 +38,7 @@ type Args struct {
 	noColors   bool
 	noIcons    bool
 	dark       bool
+	light      bool
 }
 
 func getArgs() Args {
@@ -58,6 +59,7 @@ func getArgs() Args {
 	flag.BoolVar(&args.noColors, "no-colors", false, helpNoColors)
 	flag.BoolVar(&args.noIcons, "no-icons", false, helpNoIcons)
 	flag.BoolVar(&args.dark, "dark", false, "Enable dark theme color output")
+	flag.BoolVar(&args.light, "light", true, "Enable light theme color output")
 
 	var showHelp = flag.BoolP("help", "h", false, helpShow)
 
