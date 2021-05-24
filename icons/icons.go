@@ -4,10 +4,9 @@ const (
 	File = ""
 	Dir  = ""
 
-	LinkFile = ""
-	LinkDir  = ""
-	//LinkArrow = "壟"
-	LinkArrow = ""
+	LinkFile  = ""
+	LinkDir   = ""
+	LinkArrow = "↪"
 
 	Archive = ""
 	Audio   = "ﱘ"

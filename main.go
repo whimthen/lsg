@@ -75,14 +75,12 @@ func doLS(args Args) {
 }
 
 func doTree(args Args) {
-	wd, _ := os.Getwd()
-
 	for _, path := range args.paths {
-
 		var err error
 		if filepath.IsAbs(path) {
 			err = os.Chdir(path)
 		} else {
+			wd, _ := os.Getwd()
 			err = os.Chdir(filepath.Join(wd, path))
 		}
 

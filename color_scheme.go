@@ -23,6 +23,7 @@ var (
 		gc:  color.HEX("#d7d691"),
 		nc:  color.HEX("#ffffff"),
 		tc:  color.HEX("#71ad8a"),
+		lc:  color.HEX("#eb6b34"),
 		orc: color.FgLightRed,
 		mc: map[rune]color.RGBColor{
 			'r': color.HEX("#7ed36e"),
@@ -41,10 +42,10 @@ var (
 		ec: map[int]*color.RGBStyle{
 			category.File:       color.NewRGBStyle(color.HEX("#6ff44a")),
 			category.Dir:        color.NewRGBStyle(color.HEX("#4aaef8")),
-			category.Symlink:    color.NewRGBStyle(color.HEX("#2c2c2c")),
+			category.Symlink:    color.NewRGBStyle(color.HEX("#ebb434")),
 			category.Archive:    color.NewRGBStyle(color.HEX("#cd0000")).AddOpts(color.OpUnderscore),
 			category.Executable: color.NewRGBStyle(color.HEX("#78fa53")),
-			category.Broken:     c388425,
+			category.Broken:     color.NewRGBStyle(color.HEX("#eb3434")),
 			category.Code:       c388425,
 			category.Image:      eeab46,
 			category.Audio:      eeab46,

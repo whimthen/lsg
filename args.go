@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/muesli/termenv"
 	"os"
 
 	flag "github.com/spf13/pflag"
@@ -59,7 +60,7 @@ func getArgs() Args {
 	flag.BoolVar(&args.noColors, "no-colors", false, helpNoColors)
 	flag.BoolVar(&args.noIcons, "no-icons", false, helpNoIcons)
 	flag.BoolVar(&args.dark, "dark", false, "Enable dark theme color output")
-	flag.BoolVar(&args.light, "light", true, "Enable light theme color output")
+	flag.BoolVar(&args.light, "light", false, "Enable light theme color output")
 
 	var showHelp = flag.BoolP("help", "h", false, helpShow)
 
@@ -73,6 +74,14 @@ func getArgs() Args {
 	if args.colSep < 0 {
 		_, _ = fmt.Fprintln(os.Stderr, "column separator length should be >=0")
 		os.Exit(1)
+	}
+
+	if !args.dark && !args.light {
+		if termenv.HasDarkBackground() {
+			args.dark = true
+		} else {
+			args.light = true
+		}
 	}
 
 	if args.dark {
